@@ -70,16 +70,15 @@ pub fn decrypt_string(sk_string: &String, ciphertext_base64: &String, params: &P
         // Get u and v for this block
         let u_array = &ciphertext_list[i * block_size..i * block_size + k * n];
         let v_array = &ciphertext_list[i * block_size + k * n..(i + 1) * block_size];
-        
+
         let u: Vec<Polynomial<i64>> = u_array.chunks(n)
             .map(|chunk| Polynomial::new(chunk.to_vec()))
             .collect();
         let v = Polynomial::new(v_array.to_vec());
-        
-        // Decrypt the ciphertext
-        let mut m_b = decrypt(&sk, &u, &v, &params);
-        m_b.resize(n, 0);
-        
+
+        // Abstracted block decryption
+        let m_b = decode_block(&sk, &u, &v, params);
+
         message_binary.extend(m_b);
     }
 
@@ -95,4 +94,10 @@ pub fn decrypt_string(sk_string: &String, ciphertext_base64: &String, params: &P
 
     // Trim the null characters \0 = '00000000' from the end
     message_string.trim_end_matches('\0').to_string()
+}
+
+fn decode_block(sk: &Vec<Polynomial<i64>>, u: &Vec<Polynomial<i64>>, v: &Polynomial<i64>, params: &Parameters) -> Vec<i64> {
+    let mut m_b = decrypt(sk, u, v, params);
+    m_b.resize(params.n, 0);
+    m_b
 }
