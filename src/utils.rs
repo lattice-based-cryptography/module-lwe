@@ -2,7 +2,7 @@ use polynomial_ring::Polynomial;
 use rand_distr::{Uniform, Distribution};
 use rand::SeedableRng;
 use rand::rngs::StdRng;
-use ring_lwe::utils::{polyadd, polymul_fast, gen_uniform_poly};
+use ring_lwe::utils::{polyadd, polymul_fast, gen_uniform_poly,nearest_int};
 use ntt::omega;
 use base64::{engine::general_purpose, Engine as _};
 use bincode;
@@ -103,4 +103,14 @@ pub fn compress(data: &Vec<i64>) -> String {
 pub fn decompress(base64_str: &str) -> Vec<i64> {
     let decoded = general_purpose::STANDARD.decode(base64_str).expect("Failed to decode base64 string");
     bincode::deserialize(&decoded).expect("Failed to deserialize data")
+}
+
+pub fn encode_message(m_b: &Vec<i64>, q: i64) -> Polynomial<i64> {
+
+    // Round q/2 to the nearest integer
+    let half_q = nearest_int(q,2);
+
+    // Convert binary message to polynomial
+    Polynomial::new(vec![half_q])*Polynomial::new(m_b.to_vec())
+    
 }
