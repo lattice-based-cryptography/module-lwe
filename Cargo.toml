@@ -1,6 +1,6 @@
 [package]
 name = "module-lwe"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 description = "Implements the module learning-with-errors public key encrpytion scheme."
 license = "MIT"
