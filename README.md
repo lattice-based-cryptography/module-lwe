@@ -52,7 +52,7 @@ Runs tests to verify:
 The binary accepts optional parameters using:
 
 ```sh
---params <n> <q> <k>
+--n <n> --q <q> --k <k>
 ```
 
 Where:
@@ -67,22 +67,28 @@ If omitted, defaults are: `n = 512`, `q = 12289`, `k = 8`.
 ## 💻 Example Commands
 
 ```sh
-cargo run -- keygen
+cargo run -- keygen --save-keys
 ```
 
-Generates a public/secret keypair.
+Generates a public/secret keypair and saves the keys to files `secret.key` and `public.key`.
 
 ```sh
-cargo run -- encrypt <public_key> <message>
+cargo run -- encrypt --pubkey-file public.key "Hello, world!" --ciphertext-file ciphertext.txt
 ```
 
-Encrypts the message using the given public key.
+Encrypts the message using the given public key and save to the file `ciphertext.txt`.
 
 ```sh
-cargo run -- decrypt <secret_key> <ciphertext>
+cargo run -- encrypt --pubkey-file public.key "Hello, world!" --n 256 --q 7681 --k 4
 ```
 
-Decrypts the ciphertext using the given secret key.
+Encrypt with custom parameters `n`, `q`, `k` using the public key file `public.key`.
+
+```sh
+cargo run -- decrypt --secret-file secret.key --ciphertext-file ciphertext.txt
+```
+
+Decrypts the ciphertext using the given secret key and prints to the command line.
 
 ---
 
