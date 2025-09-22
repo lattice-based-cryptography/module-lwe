@@ -97,8 +97,6 @@ fn main() {
         Commands::Keygen { n, q, k, save_keys } => {
             let params = build_params(*n, *q, *k);
             let keypair = keygen_string(&params, None);
-            println!("Public key: {} bytes", keypair.get("public").unwrap().len());
-            println!("Secret key: {} bytes", keypair.get("secret").unwrap().len());
 
             if *save_keys {
                 use std::fs::File;
@@ -120,8 +118,7 @@ fn main() {
                 println!("Keys saved to public.key and secret.key");
             }
             else {
-                println!("Public Key:\n{}", keypair.get("public").unwrap());
-                println!("Secret Key:\n{}", keypair.get("secret").unwrap());
+                println!("{:?}", keypair);
             }
         }
 
